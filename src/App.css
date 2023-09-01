@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;700&display=swap');
+
+* {
+  font-family: 'Kalam', cursive;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: linear-gradient(to bottom, #3198e2,#6d59c0, #b93590, #e33f5f, #fdd579 );
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
