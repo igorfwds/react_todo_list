@@ -29,14 +29,16 @@ export const TodoWrapper = () => {
     <div className='TodoWrapper'>
         <h1>Task Manager</h1>
         <TodoForm addTodo={addTodo} />
-        {todos.map((todo, index) => (
-            todo.isEditing ? (
-                <EditTodoForm editTodo={editTask} task={todo} />
-            ) : (
-                <Todo task={todo} key={index} toggleComplete={toggleComplete} deleteTodo={deleteTodo} editTodo={editTodo} />
-            )
+        <div class="todos">
+            {todos.map((todo, index) => (
+                todo.isEditing ? (
+                    <EditTodoForm editTodo={editTask} task={todo} />
+                ) : (
+                    <Todo task={todo} key={index} toggleComplete={toggleComplete} deleteTodo={deleteTodo} editTodo={editTodo} />
+                )
             
-        ) )}
+            ) )}
+        </div>
     </div>
   )
 }

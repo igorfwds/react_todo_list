@@ -6,7 +6,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   background-image: linear-gradient(to bottom, #3198e2,#6d59c0, #b93590, #e33f5f, #fdd579 );
   background-attachment: fixed;
@@ -32,6 +31,7 @@ h1 {
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 6px 3px 3px  rgba(0, 0, 0, 0.367);
+  height: 50rem;
 }
 
 .TodoForm {
@@ -73,6 +73,7 @@ h1 {
 }
 .todo-btn:hover{
   background: #222222a4 ;
+  transition: 200ms;
 }
 
 .Todo {
