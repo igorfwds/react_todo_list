@@ -37,6 +37,8 @@ h1 {
 .TodoForm {
   width: 100%;
   margin-bottom: 1rem;
+  
+
 }
 
 .todo-input {
@@ -68,11 +70,35 @@ h1 {
   padding: 0.55rem;
   cursor: pointer;
   border-radius: 0.5rem;
-  
-  
+}
+
+.todo-btn-cncl{
+  background: #f2ecff5e;
+  color: #fff;
+  border: none;
+  padding: 0.55rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  height: 2.5rem;
+  width: 3.8rem;
+  margin-left: 1rem;
+}
+
+.todo-btn-cncl:hover{
+  background: #222222a4 ;
+  transition: 200ms;
 }
 .todo-btn:hover{
   background: #222222a4 ;
+  transition: 300ms;
+}
+
+.lata_de_lixo:hover{
+  color: #fff ;
+  transition: 300ms;
+}
+.caneta_de_edicao:hover{
+  color: #fff ;
   transition: 200ms;
 }
 
