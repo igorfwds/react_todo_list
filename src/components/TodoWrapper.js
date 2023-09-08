@@ -130,6 +130,14 @@ export const TodoWrapper = () => {
     setModalVisible(false);
   };
 
+  const cancelEdit = () => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.isEditing ? { ...todo, isEditing: false } : todo
+      )
+    );
+  };
+
   return (
     <div className='TodoWrapper'>
       <h1>Task Manager</h1>
@@ -139,7 +147,12 @@ export const TodoWrapper = () => {
         {/* Mapeia e renderiza a lista de tarefas */}
         {todos.map((todo, index) =>
           todo.isEditing ? (
-            <EditTodoForm editTodo={editTask} task={todo} deleteTodo={deleteTodo}/>
+            <EditTodoForm
+              editTodo={editTask}
+              task={todo}
+              deleteTodo={deleteTodo}
+              cancelEdit={cancelEdit} // Passa a função cancelEdit para o componente EditTodoForm
+            />
           ) : (
             <Todo task={todo} key={index} toggleComplete={toggleComplete} deleteTodo={deleteTodo} editTodo={editTodo} />
           )

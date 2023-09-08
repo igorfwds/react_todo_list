@@ -18,10 +18,10 @@ export const Todo = ({ task, toggleComplete, deleteTodo, editTodo }) => {
       <div>
         {!task.completed && (
           <>
-            <FontAwesomeIcon icon={faPenToSquare} onClick={() => editTodo(task.id)} />
+            <FontAwesomeIcon icon={faPenToSquare} onClick={() => editTodo(task.id)} className='caneta_de_edicao'/>
           </>
         )}
-        <FontAwesomeIcon icon={faTrash} onClick={() => deleteTodo(task.id)} />
+        <FontAwesomeIcon icon={faTrash} onClick={() => deleteTodo(task.id)} className='lata_de_lixo'/>
       </div>
     </div>
   );
