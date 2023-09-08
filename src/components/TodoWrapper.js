@@ -15,19 +15,22 @@ export const TodoWrapper = () => {
 
   // Função para adicionar uma nova tarefa
   const addTodo = (todo) => {
-    // Verifica se a tarefa já existe na lista
+    if (todo.trim() === '') {
+      // Verifica se a tarefa está em branco (somente espaços em branco)
+      alert("Por favor, insira uma tarefa válida.");
+      return; // Impede a adição de tarefas vazias
+    }
+  
     if (!todos.some((existingTodo) => existingTodo.task.toLowerCase() === todo.toLowerCase())) {
-      // Adiciona a nova tarefa à lista de tarefas
       setTodos((prevTodos) => {
         const updatedTodos = [
           ...prevTodos,
           { id: uuidv4(), task: todo, completed: false, isEditing: false },
         ];
-        localStorage.setItem('tarefas', JSON.stringify(updatedTodos)); // <- Atualização imediata do localStorage
+        localStorage.setItem('tarefas', JSON.stringify(updatedTodos));
         return updatedTodos;
       });
     } else {
-      // Exibe uma mensagem de erro se a tarefa já existe
       alert("Esta tarefa já existe na lista.");
     }
   };
@@ -73,7 +76,11 @@ export const TodoWrapper = () => {
 
   // Função para editar o texto de uma tarefa
   const editTask = (newTask, id) => {
-    // Verifica se a nova tarefa é igual a alguma tarefa existente (ignorando letras maiúsculas/minúsculas) e exclui a tarefa atual
+    if (newTask.trim() === '') {
+      alert("Por favor, insira uma tarefa válida.");
+      return; // Impede a edição para tarefas em branco
+    }
+  
     if (!todos.some((existingTodo) => existingTodo.task.toLowerCase() === newTask.toLowerCase() && existingTodo.id !== id)) {
       setTodos((prevTodos) =>
         prevTodos.map((todo) =>
@@ -83,7 +90,6 @@ export const TodoWrapper = () => {
         )
       );
   
-      // Atualiza o localStorage após a edição
       const updatedTodos = todos.map((todo) =>
         todo.id === id
           ? { ...todo, task: newTask, isEditing: !todo.isEditing, completed: false }
@@ -92,7 +98,6 @@ export const TodoWrapper = () => {
   
       localStorage.setItem('tarefas', JSON.stringify(updatedTodos));
     } else {
-      // Exibe uma mensagem de erro se a tarefa já existe
       alert("Esta tarefa já existe na lista.");
     }
   };
