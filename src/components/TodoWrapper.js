@@ -18,10 +18,14 @@ export const TodoWrapper = () => {
     // Verifica se a tarefa já existe na lista
     if (!todos.some((existingTodo) => existingTodo.task.toLowerCase() === todo.toLowerCase())) {
       // Adiciona a nova tarefa à lista de tarefas
-      setTodos([
-        ...todos,
-        { id: uuidv4(), task: todo, completed: false, isEditing: false },
-      ]);
+      setTodos((prevTodos) => {
+        const updatedTodos = [
+          ...prevTodos,
+          { id: uuidv4(), task: todo, completed: false, isEditing: false },
+        ];
+        localStorage.setItem('tarefas', JSON.stringify(updatedTodos)); // <- Atualização imediata do localStorage
+        return updatedTodos;
+      });
     } else {
       // Exibe uma mensagem de erro se a tarefa já existe
       alert("Esta tarefa já existe na lista.");
@@ -41,14 +45,20 @@ export const TodoWrapper = () => {
       const incompleteTodos = updatedTodos.filter((todo) => !todo.completed);
 
       // Retorna a lista atualizada com as tarefas não concluídas seguidas pelas tarefas concluídas
-      return [...incompleteTodos, ...completedTodos];
+      const finalTodos = [...incompleteTodos, ...completedTodos];
+      localStorage.setItem('tarefas', JSON.stringify(finalTodos)); // <- Atualização imediata do localStorage
+      return finalTodos;
     });
   };
 
   // Função para excluir uma tarefa
   const deleteTodo = (id) => {
     // Remove a tarefa com o ID correspondente da lista de tarefas
-    setTodos(todos.filter((todo) => todo.id !== id));
+    setTodos((prevTodos) => {
+      const updatedTodos = prevTodos.filter((todo) => todo.id !== id);
+      localStorage.setItem('tarefas', JSON.stringify(updatedTodos)); // <- Atualização imediata do localStorage
+      return updatedTodos;
+    });
   };
 
   // Função para entrar no modo de edição de uma tarefa
@@ -72,6 +82,15 @@ export const TodoWrapper = () => {
             : todo
         )
       );
+  
+      // Atualiza o localStorage após a edição
+      const updatedTodos = todos.map((todo) =>
+        todo.id === id
+          ? { ...todo, task: newTask, isEditing: !todo.isEditing, completed: false }
+          : todo
+      );
+  
+      localStorage.setItem('tarefas', JSON.stringify(updatedTodos));
     } else {
       // Exibe uma mensagem de erro se a tarefa já existe
       alert("Esta tarefa já existe na lista.");
@@ -79,6 +98,14 @@ export const TodoWrapper = () => {
   };
 
   // Efeito colateral para verificar se todas as atividades foram concluídas e mostrar o modal de parabenização
+  useEffect(() => {
+    const tarefasSalvas = JSON.parse(localStorage.getItem('tarefas'));
+    if (tarefasSalvas) {
+      setTodos(tarefasSalvas);
+    }
+  }, []);
+
+  // Efeito colateral para atualizar o modal de parabenização com base nas tarefas concluídas
   useEffect(() => {
     const todasAtividadesConcluidas = todos.every((todo) => todo.completed);
 
