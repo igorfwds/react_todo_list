@@ -7,10 +7,18 @@ uuidv4()
 
 export const TodoWrapper = () => {
     const [todos, setTodos] = useState([])
-    const addTodo = todo=> {
-        setTodos([...todos, {id: uuidv4(), task: todo, completed: false, isEditing: false } ])
-        console.log(todos);
-    }
+    const addTodo = (todo) => {
+        // Verifica se a tarefa já existe na lista
+        if (!todos.some((existingTodo) => existingTodo.task.toLowerCase() === todo.toLowerCase())) {
+          setTodos([
+            ...todos,
+            { id: uuidv4(), task: todo, completed: false, isEditing: false },
+          ]);
+        } else {
+          // Exibe uma mensagem de erro ou tome outra ação apropriada
+          alert("Esta tarefa já existe na lista.");
+        }
+      };
 
     const toggleComplete = (id) => {
         setTodos((prevTodos) => {
@@ -32,9 +40,22 @@ export const TodoWrapper = () => {
     const editTodo = id =>{
         setTodos(todos.map(todo => todo.id === id ? {...todo, isEditing: !todo.isEditing}: todo))
     }
-    const editTask = (task,id) => {
-        setTodos(todos.map(todo => todo.id === id ? {...todo, task, isEditing: !todo.isEditing, completed: false}: todo))
+    
+const editTask = (newTask, id) => {
+    // Verifica se a nova tarefa é igual a alguma tarefa existente, excluindo a tarefa atual
+    if (!todos.some((existingTodo) => existingTodo.task.toLowerCase() === newTask.toLowerCase() && existingTodo.id !== id)) {
+      setTodos(
+        todos.map((todo) =>
+          todo.id === id
+            ? { ...todo, task: newTask, isEditing: !todo.isEditing, completed: false }
+            : todo
+        )
+      );
+    } else {
+      // Exibe uma mensagem de erro ou tome outra ação apropriada
+      alert("Esta tarefa já existe na lista.");
     }
+  };
 
   return (
     <div className='TodoWrapper'>
