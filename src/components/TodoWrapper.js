@@ -1,76 +1,120 @@
-import React,{useState} from 'react'
-import { TodoForm } from './TodoForm'
-import { v4 as uuidv4 } from 'uuid'
-import { Todo } from './Todo'
-import { EditTodoForm } from './EditTodoForm'
-uuidv4()
+import React, { useState, useEffect } from 'react';
+import { TodoForm } from './TodoForm';
+import { v4 as uuidv4 } from 'uuid';
+import { Todo } from './Todo';
+import { EditTodoForm } from './EditTodoForm';
+import ParabensModal from './ParabensModal';
+
+uuidv4();
 
 export const TodoWrapper = () => {
-    const [todos, setTodos] = useState([])
-    const addTodo = (todo) => {
-        // Verifica se a tarefa já existe na lista
-        if (!todos.some((existingTodo) => existingTodo.task.toLowerCase() === todo.toLowerCase())) {
-          setTodos([
-            ...todos,
-            { id: uuidv4(), task: todo, completed: false, isEditing: false },
-          ]);
-        } else {
-          // Exibe uma mensagem de erro ou tome outra ação apropriada
-          alert("Esta tarefa já existe na lista.");
-        }
-      };
+  // Estado para armazenar as tarefas
+  const [todos, setTodos] = useState([]);
+  // Estado para controlar a visibilidade do modal de parabenização
+  const [modalVisible, setModalVisible] = useState(false);
 
-    const toggleComplete = (id) => {
-        setTodos((prevTodos) => {
-          const updatedTodos = prevTodos.map((todo) =>
-            todo.id === id ? { ...todo, completed: !todo.completed } : todo
-          );
-      
-          // Mova as tarefas concluídas para o final do array
-          const completedTodos = updatedTodos.filter((todo) => todo.completed);
-          const incompleteTodos = updatedTodos.filter((todo) => !todo.completed);
-      
-          return [...incompleteTodos, ...completedTodos];
-        });
-      };
-      
-    const deleteTodo = id =>{
-        setTodos(todos.filter(todo => todo.id !== id))
+  // Função para adicionar uma nova tarefa
+  const addTodo = (todo) => {
+    // Verifica se a tarefa já existe na lista
+    if (!todos.some((existingTodo) => existingTodo.task.toLowerCase() === todo.toLowerCase())) {
+      // Adiciona a nova tarefa à lista de tarefas
+      setTodos([
+        ...todos,
+        { id: uuidv4(), task: todo, completed: false, isEditing: false },
+      ]);
+    } else {
+      // Exibe uma mensagem de erro se a tarefa já existe
+      alert("Esta tarefa já existe na lista.");
     }
-    const editTodo = id =>{
-        setTodos(todos.map(todo => todo.id === id ? {...todo, isEditing: !todo.isEditing}: todo))
-    }
-    
-const editTask = (newTask, id) => {
-    // Verifica se a nova tarefa é igual a alguma tarefa existente, excluindo a tarefa atual
+  };
+
+  // Função para marcar uma tarefa como concluída ou não concluída
+  const toggleComplete = (id) => {
+    setTodos((prevTodos) => {
+      // Atualiza o estado das tarefas, marcando a tarefa com o ID correspondente como concluída ou não concluída
+      const updatedTodos = prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      );
+
+      // Mova as tarefas concluídas para o final do array
+      const completedTodos = updatedTodos.filter((todo) => todo.completed);
+      const incompleteTodos = updatedTodos.filter((todo) => !todo.completed);
+
+      // Retorna a lista atualizada com as tarefas não concluídas seguidas pelas tarefas concluídas
+      return [...incompleteTodos, ...completedTodos];
+    });
+  };
+
+  // Função para excluir uma tarefa
+  const deleteTodo = (id) => {
+    // Remove a tarefa com o ID correspondente da lista de tarefas
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  // Função para entrar no modo de edição de uma tarefa
+  const editTodo = (id) => {
+    setTodos((prevTodos) =>
+      // Alterna o estado de edição da tarefa com o ID correspondente
+      prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
+      )
+    );
+  };
+
+  // Função para editar o texto de uma tarefa
+  const editTask = (newTask, id) => {
+    // Verifica se a nova tarefa é igual a alguma tarefa existente (ignorando letras maiúsculas/minúsculas) e exclui a tarefa atual
     if (!todos.some((existingTodo) => existingTodo.task.toLowerCase() === newTask.toLowerCase() && existingTodo.id !== id)) {
-      setTodos(
-        todos.map((todo) =>
+      setTodos((prevTodos) =>
+        prevTodos.map((todo) =>
           todo.id === id
             ? { ...todo, task: newTask, isEditing: !todo.isEditing, completed: false }
             : todo
         )
       );
     } else {
-      // Exibe uma mensagem de erro ou tome outra ação apropriada
+      // Exibe uma mensagem de erro se a tarefa já existe
       alert("Esta tarefa já existe na lista.");
     }
   };
 
+  // Efeito colateral para verificar se todas as atividades foram concluídas e mostrar o modal de parabenização
+  useEffect(() => {
+    const todasAtividadesConcluidas = todos.every((todo) => todo.completed);
+
+    // Verifica se todas as atividades estão concluídas e se há pelo menos uma tarefa na lista
+    if (todasAtividadesConcluidas && todos.length > 0) {
+      // Define o modal de parabenização como visível
+      setModalVisible(true);
+    } else {
+      // Define o modal de parabenização como oculto
+      setModalVisible(false);
+    }
+  }, [todos]);
+
+  // Função para fechar o modal de parabenização
+  const handleCloseModal = () => {
+    // Define o modal de parabenização como oculto
+    setModalVisible(false);
+  };
+
   return (
     <div className='TodoWrapper'>
-        <h1>Task Manager</h1>
-        <TodoForm addTodo={addTodo} />
-        <div class="todos">
-            {todos.map((todo, index) => (
-                todo.isEditing ? (
-                    <EditTodoForm editTodo={editTask} task={todo} />
-                ) : (
-                    <Todo task={todo} key={index} toggleComplete={toggleComplete} deleteTodo={deleteTodo} editTodo={editTodo} />
-                )
-            
-            ) )}
-        </div>
+      <h1>Task Manager</h1>
+      {/* Componente para adicionar novas tarefas */}
+      <TodoForm addTodo={addTodo} />
+      <div className="todos">
+        {/* Mapeia e renderiza a lista de tarefas */}
+        {todos.map((todo, index) =>
+          todo.isEditing ? (
+            <EditTodoForm editTodo={editTask} task={todo} />
+          ) : (
+            <Todo task={todo} key={index} toggleComplete={toggleComplete} deleteTodo={deleteTodo} editTodo={editTodo} />
+          )
+        )}
+      </div>
+      {/* Renderiza o modal de parabenização quando a condição é verdadeira */}
+      {modalVisible && <ParabensModal onClose={handleCloseModal} />}
     </div>
-  )
-}
+  );
+};
