@@ -134,7 +134,7 @@ export const TodoWrapper = () => {
         {/* Mapeia e renderiza a lista de tarefas */}
         {todos.map((todo, index) =>
           todo.isEditing ? (
-            <EditTodoForm editTodo={editTask} task={todo} />
+            <EditTodoForm editTodo={editTask} task={todo} deleteTodo={deleteTodo}/>
           ) : (
             <Todo task={todo} key={index} toggleComplete={toggleComplete} deleteTodo={deleteTodo} editTodo={editTodo} />
           )
