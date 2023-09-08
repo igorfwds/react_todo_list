@@ -12,9 +12,20 @@ export const TodoWrapper = () => {
         console.log(todos);
     }
 
-    const toggleComplete = id =>{
-        setTodos(todos.map(todo => todo.id === id ? {...todo, completed: !todo.completed} : todo ))
-    }
+    const toggleComplete = (id) => {
+        setTodos((prevTodos) => {
+          const updatedTodos = prevTodos.map((todo) =>
+            todo.id === id ? { ...todo, completed: !todo.completed } : todo
+          );
+      
+          // Mova as tarefas concluídas para o final do array
+          const completedTodos = updatedTodos.filter((todo) => todo.completed);
+          const incompleteTodos = updatedTodos.filter((todo) => !todo.completed);
+      
+          return [...incompleteTodos, ...completedTodos];
+        });
+      };
+      
     const deleteTodo = id =>{
         setTodos(todos.filter(todo => todo.id !== id))
     }
@@ -22,7 +33,7 @@ export const TodoWrapper = () => {
         setTodos(todos.map(todo => todo.id === id ? {...todo, isEditing: !todo.isEditing}: todo))
     }
     const editTask = (task,id) => {
-        setTodos(todos.map(todo => todo.id === id ? {...todo, task, isEditing: !todo.isEditing}: todo))
+        setTodos(todos.map(todo => todo.id === id ? {...todo, task, isEditing: !todo.isEditing, completed: false}: todo))
     }
 
   return (

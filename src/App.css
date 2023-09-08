@@ -108,6 +108,14 @@ h1 {
   background: none;
 }
 
+
+
+.completed-task {
+  opacity: 60%; 
+  transition: opacity 0.8s ease-in-out; 
+}
+
+
 *::-webkit-scrollbar-thumb {
   background-color: rgba(43, 43, 43, 0.71);
   border-radius: 30px;
