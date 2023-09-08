@@ -29,8 +29,8 @@ h1 {
   background: #18181858;
   margin-top: 5rem;
   padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 6px 3px 3px  rgba(0, 0, 0, 0.367);
+  border-radius: 2rem;
+  box-shadow: 0.5rem 0.4rem 0.4rem  rgba(0, 0, 0, 0.367);
   height: 50rem;
 }
 
@@ -42,15 +42,15 @@ h1 {
 .todo-input {
   outline: none;
   background: none;
-  border: 1px solid #f2ecff5e;
+  border: 0.1rem solid #f2ecff5e;
   padding: 0.5rem 1rem;
   margin-top: 1rem;
   margin-bottom: 2rem;
   margin-right: 2rem;
-  width: 300px;
+  width: 20rem;
   color: #fff;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 0.5rem;
   font-family: Arial, Helvetica, sans-serif;
   
 }
@@ -67,7 +67,7 @@ h1 {
   border: none;
   padding: 0.55rem;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 0.5rem;
   
   
 }
@@ -83,7 +83,7 @@ h1 {
   background: #f2ecff5e;
   color: #000000;
   padding: 0.75rem 1rem;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   margin-bottom: 1rem;
   cursor: pointer;
   font-weight: bold;
